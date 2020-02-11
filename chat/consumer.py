@@ -13,6 +13,7 @@ class ChatConsumer(WebsocketConsumer):
         # for i in messages:
             # print(i)
         content = {
+            'command':'messages',
             'messages':self.messages_to_json(messages)
         }
         self.send_message(content)
@@ -28,6 +29,7 @@ class ChatConsumer(WebsocketConsumer):
             'command':'new_message',
             'message':self.message_to_json(message)
         }
+        print("31",content)
         return self.send_chat_message(content)
          
     
@@ -78,8 +80,6 @@ class ChatConsumer(WebsocketConsumer):
         self.commands[data['command']](self,data)
 
     def send_chat_message(self,message):
-        message = data['message']
-
         # Send message to room group
         async_to_sync(self.channel_layer.group_send)(
             self.room_group_name,
